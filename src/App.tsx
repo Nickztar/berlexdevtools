@@ -1,21 +1,64 @@
-import React, { useEffect } from 'react';
-import { Button } from '@chakra-ui/react';
-import { Login } from './components/Login';
+import { useEffect, useState } from "react";
+import { Enviroment } from "./components/Enviroment";
+import { Header } from "./components/Header";
+import { Login } from "./components/Login";
+import { Enviroments } from "./types/enums";
+import { Token } from "./types/token";
 
 function App() {
-  useEffect(() => {
-    fetch("https://api-test.berlexconnect.com/api/v1/country").then(res => res.json()).then(data => { console.log(data) });
-  }, [])
+    const [enviroment, setEnviroment] = useState(Enviroments.Unset);
+    const [token, setToken] = useState<Token | undefined>();
+    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+    useEffect(() => {
+        const storedToken = localStorage.getItem("token");
+        if (storedToken) {
+            setToken(JSON.parse(storedToken) as Token);
+        }
+    }, []);
 
+    useEffect(() => {
+        if (
+            token &&
+            Date.parse(token.expires) > Date.now() &&
+            token.enviroment == enviroment
+        ) {
+            localStorage.setItem("token", JSON.stringify(token));
+            setIsAuthenticated(true);
+        } else if (token) {
+            setToken(undefined);
+        } else {
+            setIsAuthenticated(false);
+            localStorage.removeItem("token");
+        }
+    }, [token, enviroment]);
 
-  return (
-    <Login />
-    // <div className="App">
-    //   <header className="App-header">
-    //     <Button>Berlex Devtools</Button>
-    //   </header>
-    // </div>
-  );
+    const signOut = () => {
+        setToken(undefined);
+    };
+
+    if (enviroment === Enviroments.Unset) {
+        return <Enviroment setEnviroment={setEnviroment} />;
+    }
+    if (!isAuthenticated) {
+        return (
+            <>
+                <Header
+                    Enviroment={enviroment}
+                    changeEnviroment={setEnviroment}
+                />
+                <Login setToken={setToken} Enviroment={enviroment} />
+            </>
+        );
+    }
+
+    return (
+        <Header
+            Username={token?.userName}
+            Enviroment={enviroment}
+            changeEnviroment={setEnviroment}
+            signOut={signOut}
+        />
+    );
 }
 
 export default App;
