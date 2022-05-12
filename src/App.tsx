@@ -1,14 +1,16 @@
+import { Box } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { Enviroment } from "./components/Enviroment";
+import { Actions } from "./components/Actions";
 import { Header } from "./components/Header";
 import { Login } from "./components/Login";
-import { Enviroments } from "./types/enums";
+import { Enviroments } from "./types/constants";
 import { Token } from "./types/token";
+import { Settings } from "./types/types";
 
 function App() {
-    const [enviroment, setEnviroment] = useState(Enviroments.Unset);
+    const [enviroment, setEnviroment] = useState(Enviroments.Test);
     const [token, setToken] = useState<Token | undefined>();
-    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+    const [settings, setSettings] = useState<Settings | undefined>(undefined);
     useEffect(() => {
         const storedToken = localStorage.getItem("token");
         if (storedToken) {
@@ -20,44 +22,42 @@ function App() {
         if (
             token &&
             Date.parse(token.expires) > Date.now() &&
-            token.enviroment == enviroment
+            token.enviroment === enviroment
         ) {
             localStorage.setItem("token", JSON.stringify(token));
-            setIsAuthenticated(true);
-        } else if (token) {
-            setToken(undefined);
         } else {
-            setIsAuthenticated(false);
-            localStorage.removeItem("token");
+            setToken(undefined);
+            // localStorage.removeItem("token");
         }
     }, [token, enviroment]);
 
-    const signOut = () => {
-        setToken(undefined);
-    };
-
-    if (enviroment === Enviroments.Unset) {
-        return <Enviroment setEnviroment={setEnviroment} />;
-    }
-    if (!isAuthenticated) {
+    if (!token) {
         return (
             <>
-                <Header
+                <Login
+                    setToken={setToken}
                     Enviroment={enviroment}
-                    changeEnviroment={setEnviroment}
+                    setEnivorment={setEnviroment}
                 />
-                <Login setToken={setToken} Enviroment={enviroment} />
             </>
         );
     }
 
     return (
-        <Header
-            Username={token?.userName}
-            Enviroment={enviroment}
-            changeEnviroment={setEnviroment}
-            signOut={signOut}
-        />
+        <>
+            <Header
+                Username={token?.userName}
+                Enviroment={enviroment}
+                changeEnviroment={setEnviroment}
+                signOut={() => setToken(undefined)}
+                setSettings={(u, p) =>
+                    setSettings({ Username: u, Password: p })
+                }
+            />
+            <Box pt="48px">
+                <Actions settings={settings} enviroment={enviroment} />
+            </Box>
+        </>
     );
 }
 

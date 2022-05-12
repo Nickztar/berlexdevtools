@@ -1,13 +1,15 @@
-import { ButtonGroup, Button, IconButton, Flex } from "@chakra-ui/react";
+import { ButtonGroup, IconButton, Flex } from "@chakra-ui/react";
 import { MdRefresh } from "react-icons/md";
-import { Enviroments } from "../types/enums";
+import { Enviroments } from "../types/constants";
 import { GoSignOut } from "react-icons/go";
+import { MqttSettings } from "./MqttSettings";
 
 type Props = {
     Username?: string;
     Enviroment: string;
     changeEnviroment: (env: string) => void;
     signOut?: () => void;
+    setSettings: (username: string, password: string) => void;
 };
 
 export function Header({
@@ -15,6 +17,7 @@ export function Header({
     Enviroment,
     changeEnviroment,
     signOut,
+    setSettings,
 }: Props) {
     return (
         <Flex
@@ -22,20 +25,19 @@ export function Header({
             pos={"absolute"}
             p={2}
             align={"center"}
-            justify="space-between"
+            justify="flex-end"
         >
-            <ButtonGroup size="sm" isAttached variant="outline">
-                <Button mr="-px">{Enviroment}</Button>
-                <IconButton
-                    onClick={() => changeEnviroment(Enviroments.Unset)}
-                    aria-label="Change enviroment"
-                    icon={<MdRefresh />}
-                />
-            </ButtonGroup>
             {Username && (
                 <ButtonGroup size="sm" isAttached variant="outline">
-                    <Button mr="-px">{Username}</Button>
+                    <MqttSettings setSettings={setSettings} />
                     <IconButton
+                        title={Enviroment}
+                        onClick={() => changeEnviroment(Enviroments.Unset)}
+                        aria-label="Change enviroment"
+                        icon={<MdRefresh />}
+                    />
+                    <IconButton
+                        title={Username}
                         onClick={() => signOut && signOut()}
                         aria-label="Change enviroment"
                         icon={<GoSignOut />}

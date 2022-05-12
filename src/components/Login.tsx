@@ -11,52 +11,67 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { MdOutlineEmail, MdPassword } from "react-icons/md";
+import { FaServer } from "react-icons/fa";
 import { Token } from "../types/token";
 
 type Props = {
     Enviroment: string;
     setToken: (token: Token) => void;
+    setEnivorment: (enviroment: string) => void;
 };
-
-export function Login({ Enviroment, setToken }: Props) {
+function isValidHttpUrl(string: string): boolean {
+    let url;
+    try {
+        url = new URL(string);
+    } catch (_) {
+        return false;
+    }
+    return url.protocol === "http:" || url.protocol === "https:";
+}
+export function Login({ Enviroment, setEnivorment, setToken }: Props) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState<string | null>(null);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
-    const handleLogin = () => {
+    const handleLogin = async () => {
+        if (!isValidHttpUrl(Enviroment)) {
+            setError("Invalid enviroment");
+            return;
+        }
         setError(null);
-        const data = new URLSearchParams();
-        data.append("username", username);
-        data.append("password", password);
-        data.append("grant_type", "password");
+        const body = new URLSearchParams();
+        body.append("username", username);
+        body.append("password", password);
+        body.append("grant_type", "password");
         const url = Enviroment + "/token";
-        fetch(url, {
+        setIsLoading(true);
+        const reponse = await fetch(url, {
             method: "post",
-            body: data,
-        })
-            .then((res) => {
-                if (res.status === 200) {
-                    return res.json();
-                } else {
-                    setError("Invalid username or password");
-                    return undefined;
-                }
-            })
-            .then((data) => {
-                if (!data) return;
-                const issued = data[".issued"];
-                const expires = data[".expires"];
-                const token = {
-                    issued,
-                    expires,
-                    access_token: data.access_token,
-                    expires_in: data.expires_in,
-                    token_type: data.token_type,
-                    userName: data.userName,
-                    enviroment: Enviroment,
-                } as Token;
-                setToken(token);
-            });
+            body,
+        }).catch(() => {
+            setError("Failed to connect to server");
+            setIsLoading(false);
+        });
+        if (!reponse || reponse.status !== 200) {
+            setError("Invalid username or password");
+            setIsLoading(false);
+        }
+        const data = await reponse!.json();
+        setIsLoading(false);
+        if (!data) return;
+        const issued = data[".issued"];
+        const expires = data[".expires"];
+        const token = {
+            issued,
+            expires,
+            access_token: data.access_token,
+            expires_in: data.expires_in,
+            token_type: data.token_type,
+            userName: data.userName,
+            enviroment: Enviroment,
+        } as Token;
+        setToken(token);
     };
 
     return (
@@ -70,10 +85,23 @@ export function Login({ Enviroment, setToken }: Props) {
                 <InputGroup>
                     <InputLeftElement
                         pointerEvents="none"
+                        children={<Icon as={FaServer} />}
+                    />
+                    <Input
+                        autoFocus={true}
+                        value={Enviroment}
+                        onChange={(e) => setEnivorment(e.target.value)}
+                        placeholder="Enviroment"
+                    />
+                </InputGroup>
+                <InputGroup>
+                    <InputLeftElement
+                        pointerEvents="none"
                         children={<Icon as={MdOutlineEmail} />}
                     />
                     <Input
                         autoFocus={true}
+                        value={username}
                         onChange={(e) => setUsername(e.target.value)}
                         placeholder="Username"
                     />
@@ -86,12 +114,15 @@ export function Login({ Enviroment, setToken }: Props) {
                     <Input
                         onChange={(e) => setPassword(e.target.value)}
                         placeholder="Password"
+                        value={password}
                         type={"password"}
                     />
                 </InputGroup>
-                <Button onClick={handleLogin}>Login</Button>
+                <Button isLoading={isLoading} onClick={handleLogin}>
+                    Login
+                </Button>
                 {error && (
-                    <Text color={"red"} fontSize="2xl">
+                    <Text alignSelf={"center"} color={"red"} fontSize="xl">
                         {error}
                     </Text>
                 )}
