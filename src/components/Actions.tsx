@@ -1,7 +1,6 @@
 import { Flex, Input, VStack } from "@chakra-ui/react";
 import { useState } from "react";
 import { MqttMessage, Settings } from "../types/types";
-import AnglePicker from "./AnglePicker";
 import { Errors } from "./Errors";
 import { Powerstates } from "./Powerstates";
 import { Volt } from "./Volt";
