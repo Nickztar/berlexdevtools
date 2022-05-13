@@ -1,3 +1,5 @@
+import { Bit } from "../types/types";
+
 export function debounce<Params extends any[]>(
     func: (...args: Params) => any,
     timeout: number
@@ -38,6 +40,10 @@ export function off<T extends Window | Document | HTMLElement | EventTarget>(
         );
     }
 }
+
+export const maskSum = (selected: Bit[]) => {
+    return selected.reduce((acc, curr) => acc + curr.mask, 0);
+};
 
 export const isBrowser = typeof window !== "undefined";
 

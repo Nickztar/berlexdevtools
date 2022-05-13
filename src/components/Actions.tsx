@@ -5,6 +5,7 @@ import AnglePicker from "./AnglePicker";
 import { Errors } from "./Errors";
 import { Powerstates } from "./Powerstates";
 import { Volt } from "./Volt";
+import { Capabilities } from "./Capabilities";
 
 type Props = {
     settings: Settings | undefined;
@@ -60,6 +61,7 @@ export function Actions({ settings, enviroment }: Props) {
                 </Flex>
                 <Powerstates setPowerstate={sendAction} />
                 <Errors sendErrors={sendAction} />
+                <Capabilities sendCapabilites={sendAction} />
                 <Volt sendVolt={sendAction} />
                 {/* <AnglePicker /> */}
             </VStack>

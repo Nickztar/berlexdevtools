@@ -6,12 +6,12 @@ import { maskSum } from "../utils/helpers";
 import { BitAction } from "./BitAction";
 
 type Props = {
-    sendErrors: (message: MqttMessage) => void;
+    sendCapabilites: (message: MqttMessage) => void;
 };
 
-export function Errors({ sendErrors }: Props) {
+export function Capabilities({ sendCapabilites }: Props) {
     const [selected, setSelected] = useState<Bit[]>([]);
-    const PossibleErrors: Bit[] = [
+    const PossibleCapabilities: Bit[] = [
         { title: "bit0", mask: 1 },
         { title: "bit1", mask: 2 },
         { title: "bit2", mask: 4 },
@@ -21,7 +21,6 @@ export function Errors({ sendErrors }: Props) {
         { title: "bit6", mask: 64 },
         { title: "bit7", mask: 128 },
     ];
-
     const toggleSelected = (error: Bit) => {
         if (selected.find((s) => s.mask === error.mask)) {
             setSelected((prevSelected) =>
@@ -33,13 +32,15 @@ export function Errors({ sendErrors }: Props) {
     };
     return (
         <ButtonGroup isAttached>
-            {PossibleErrors.map((error) => (
+            {PossibleCapabilities.map((capability) => (
                 <BitAction
-                    key={error.mask}
-                    variant={"error"}
-                    onClick={() => toggleSelected(error)}
-                    isIncluded={!!selected.find((s) => s.mask === error.mask)}
-                    text={error.title}
+                    key={capability.mask}
+                    variant={"capability"}
+                    onClick={() => toggleSelected(capability)}
+                    isIncluded={
+                        !!selected.find((s) => s.mask === capability.mask)
+                    }
+                    text={capability.title}
                 />
             ))}
             <IconButton
@@ -51,8 +52,8 @@ export function Errors({ sendErrors }: Props) {
                 icon={<MdClear />}
                 onClick={() => {
                     setSelected([]);
-                    sendErrors({
-                        topic: "error",
+                    sendCapabilites({
+                        topic: "capabilities",
                         message: `mask=0`,
                     });
                 }}
@@ -65,8 +66,8 @@ export function Errors({ sendErrors }: Props) {
                 aria-label={"send"}
                 icon={<MdSend />}
                 onClick={() =>
-                    sendErrors({
-                        topic: "error",
+                    sendCapabilites({
+                        topic: "capabilities",
                         message: `mask=${maskSum(selected)}`,
                     })
                 }
