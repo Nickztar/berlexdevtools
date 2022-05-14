@@ -8,11 +8,12 @@ import {
     IconButton,
     Tooltip,
     SliderMark,
+    useColorModeValue,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { MdSend } from "react-icons/md";
 import { HiLightningBolt } from "react-icons/hi";
-import { MqttMessage } from "../types/types";
+import { MqttMessage } from "../../types/types";
 
 type Props = {
     sendVolt: (message: MqttMessage) => void;
@@ -21,11 +22,17 @@ type Props = {
 const formatVoltage = (voltage: number) => {
     return (Math.round(voltage * 100) / 100).toFixed(2);
 };
+const voltColor = (volt: number) => {
+    if (volt <= 10.8) return "red.500";
+    if (volt > 10.8 && volt <= 11.7) return "yellow.400";
+    return "green.400";
+};
 
 export function Volt({ sendVolt }: Props) {
     const [sliderValue, setSliderValue] = useState(12);
     const [showTooltip, setShowTooltip] = useState(false);
     const [timer, setTimer] = useState<NodeJS.Timeout | null>(null);
+    const thumbColor = useColorModeValue("gray.800", "white");
 
     const onEnter = () => {
         if (timer) {
@@ -43,7 +50,7 @@ export function Volt({ sendVolt }: Props) {
     };
 
     return (
-        <Flex mt={6}>
+        <Flex w={"100%"} mt={6} mb={4}>
             <Slider
                 aria-label="slider-ex-4"
                 min={0}
@@ -75,19 +82,26 @@ export function Volt({ sendVolt }: Props) {
                 >
                     15v
                 </SliderMark>
-                <SliderTrack bg="red.100">
-                    <SliderFilledTrack bg="yellow" />
+                <SliderTrack
+                    bgGradient={
+                        "linear(to-r, red.500 0%, red.500 72%, yellow.400 72%, yellow.400 78%, green.400 78%)"
+                    }
+                >
+                    <SliderFilledTrack bg={"transparent"} />
                 </SliderTrack>
                 <Tooltip
                     hasArrow
-                    bg="green.400"
+                    bg={voltColor(sliderValue)}
                     color="white"
                     placement="top"
                     isOpen={showTooltip}
                     label={`${formatVoltage(sliderValue)}v`}
                 >
-                    <SliderThumb boxSize={6}>
-                        <Box color="green.400" as={HiLightningBolt} />
+                    <SliderThumb bg={thumbColor} boxSize={6}>
+                        <Box
+                            color={voltColor(sliderValue)}
+                            as={HiLightningBolt}
+                        />
                     </SliderThumb>
                 </Tooltip>
             </Slider>

@@ -44,7 +44,8 @@ export function off<T extends Window | Document | HTMLElement | EventTarget>(
 export const maskSum = (selected: Bit[]) => {
     return selected.reduce((acc, curr) => acc + curr.mask, 0);
 };
-
+export const radiantsToDegrees = (radians: number) =>
+    parseInt(((radians * 180) / Math.PI).toFixed(0), 10);
 export const isBrowser = typeof window !== "undefined";
 
 export const isNavigator = typeof navigator !== "undefined";

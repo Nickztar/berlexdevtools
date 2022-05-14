@@ -91,6 +91,9 @@ export function Login({ Enviroment, setEnivorment, setToken }: Props) {
                         autoFocus={true}
                         value={Enviroment}
                         onChange={(e) => setEnivorment(e.target.value)}
+                        onKeyDown={async (e) =>
+                            e.key === "Enter" && (await handleLogin())
+                        }
                         placeholder="Enviroment"
                     />
                 </InputGroup>
@@ -103,6 +106,9 @@ export function Login({ Enviroment, setEnivorment, setToken }: Props) {
                         autoFocus={true}
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
+                        onKeyDown={async (e) =>
+                            e.key === "Enter" && (await handleLogin())
+                        }
                         placeholder="Username"
                     />
                 </InputGroup>
@@ -113,6 +119,9 @@ export function Login({ Enviroment, setEnivorment, setToken }: Props) {
                     />
                     <Input
                         onChange={(e) => setPassword(e.target.value)}
+                        onKeyDown={async (e) =>
+                            e.key === "Enter" && (await handleLogin())
+                        }
                         placeholder="Password"
                         value={password}
                         type={"password"}
