@@ -1,9 +1,9 @@
 import { ButtonGroup, IconButton } from "@chakra-ui/react";
-import { MdPower, MdPowerOff } from "react-icons/md";
-import { AiOutlineQuestion } from "react-icons/ai";
-import { MqttMessage } from "../types/types";
-import { FaLeaf } from "react-icons/fa";
+import { MdOutlinePowerSettingsNew } from "react-icons/md";
+import { FaQuestion } from "react-icons/fa";
+import { GiNightSleep } from "react-icons/gi";
 import { ReactElement } from "react";
+import { MqttMessage } from "../../types/types";
 
 type Props = {
     setPowerstate: (powerstate: MqttMessage) => void;
@@ -11,6 +11,8 @@ type Props = {
 
 type PowerState = {
     title: string;
+    color: string;
+    bg: string;
     icon: ReactElement;
     action: MqttMessage;
 };
@@ -19,17 +21,23 @@ export function Powerstates({ setPowerstate }: Props) {
     const PossiblePowerstates: PowerState[] = [
         {
             title: "on",
-            icon: <MdPower />,
+            color: "white",
+            bg: "green.400",
+            icon: <MdOutlinePowerSettingsNew />,
             action: { topic: "status", message: "cloud=online,power=on" },
         },
         {
             title: "off",
-            icon: <MdPowerOff />,
+            color: "white",
+            bg: "gray.500",
+            icon: <MdOutlinePowerSettingsNew />,
             action: { topic: "status", message: "cloud=offline,power=off" },
         },
         {
             title: "off_sleep",
-            icon: <FaLeaf />,
+            color: "white",
+            bg: "gray.400",
+            icon: <GiNightSleep />,
             action: {
                 topic: "status",
                 message: "cloud=offline,power=off_sleep",
@@ -37,14 +45,18 @@ export function Powerstates({ setPowerstate }: Props) {
         },
         {
             title: "unknown",
-            icon: <AiOutlineQuestion />,
+            color: "white",
+            bg: "red.500",
+            icon: <FaQuestion />,
             action: { topic: "status", message: "cloud=dead,power=unknown" },
         },
     ];
     return (
-        <ButtonGroup size="md" isAttached variant="outline">
+        <ButtonGroup size="sm" isAttached variant="solid">
             {PossiblePowerstates.map((powerstate) => (
                 <IconButton
+                    color={powerstate.color}
+                    bg={powerstate.bg}
                     key={powerstate.title}
                     title={powerstate.title}
                     aria-label="Change enviroment"

@@ -1,8 +1,8 @@
 import { ButtonGroup, IconButton } from "@chakra-ui/react";
 import { useState } from "react";
 import { MdClear, MdSend } from "react-icons/md";
-import { Bit, MqttMessage } from "../types/types";
-import { maskSum } from "../utils/helpers";
+import { Bit, MqttMessage } from "../../types/types";
+import { maskSum } from "../../utils/helpers";
 import { BitAction } from "./BitAction";
 
 type Props = {

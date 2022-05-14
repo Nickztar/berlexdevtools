@@ -1,17 +1,18 @@
 import { Flex, Input, VStack } from "@chakra-ui/react";
 import { useState } from "react";
 import { MqttMessage, Settings } from "../types/types";
-import { Errors } from "./Errors";
-import { Powerstates } from "./Powerstates";
-import { Volt } from "./Volt";
-import { Capabilities } from "./Capabilities";
+import { Angle } from "./Actions/Angle";
+import { Capabilities } from "./Actions/Capabilities";
+import { Errors } from "./Actions/Errors";
+import { Powerstates } from "./Actions/Powerstates";
+import { Volt } from "./Actions/Volt";
 
 type Props = {
     settings: Settings | undefined;
     enviroment: string;
 };
 
-export function Actions({ settings, enviroment }: Props) {
+export function Messaging({ settings, enviroment }: Props) {
     const [imei, setIMEI] = useState<string>("");
     const [base, setBase] = useState<string>("R6");
 
@@ -38,7 +39,7 @@ export function Actions({ settings, enviroment }: Props) {
 
     return (
         <Flex h={"100%"} align={"center"} justify="center">
-            <VStack spacing={4} align="stretch">
+            <VStack spacing={4} align="center">
                 <Flex maxW={"350px"}>
                     <Input
                         size="sm"
@@ -62,7 +63,7 @@ export function Actions({ settings, enviroment }: Props) {
                 <Errors sendErrors={sendAction} />
                 <Capabilities sendCapabilites={sendAction} />
                 <Volt sendVolt={sendAction} />
-                {/* <AnglePicker /> */}
+                <Angle sendAngle={sendAction} />
             </VStack>
         </Flex>
     );

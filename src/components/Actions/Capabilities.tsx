@@ -1,8 +1,8 @@
 import { ButtonGroup, IconButton } from "@chakra-ui/react";
 import { useState } from "react";
 import { MdClear, MdSend } from "react-icons/md";
-import { Bit, MqttMessage } from "../types/types";
-import { maskSum } from "../utils/helpers";
+import { MqttMessage, Bit } from "../../types/types";
+import { maskSum } from "../../utils/helpers";
 import { BitAction } from "./BitAction";
 
 type Props = {
@@ -17,9 +17,6 @@ export function Capabilities({ sendCapabilites }: Props) {
         { title: "bit2", mask: 4 },
         { title: "bit3", mask: 8 },
         { title: "bit4", mask: 16 },
-        { title: "bit5", mask: 32 },
-        { title: "bit6", mask: 64 },
-        { title: "bit7", mask: 128 },
     ];
     const toggleSelected = (error: Bit) => {
         if (selected.find((s) => s.mask === error.mask)) {

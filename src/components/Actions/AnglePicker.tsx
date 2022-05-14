@@ -1,5 +1,5 @@
 import { useState, useCallback, useMemo, useRef } from "react";
-import useMouse from "../hooks/useMouse";
+import useMouse from "../../hooks/useMouse";
 
 const HANDLER_RADIUS = 10;
 const DEFAULT_HANDLER_RADIUS_OFFSET = 1;

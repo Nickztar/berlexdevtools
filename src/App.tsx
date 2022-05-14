@@ -1,6 +1,6 @@
 import { Box } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-import { Actions } from "./components/Actions";
+import { useCallback, useEffect, useState } from "react";
+import { Messaging } from "./components/Messaging";
 import { Header } from "./components/Header";
 import { Login } from "./components/Login";
 import { Enviroments } from "./types/constants";
@@ -11,31 +11,50 @@ function App() {
     const [enviroment, setEnviroment] = useState(Enviroments.Test);
     const [token, setToken] = useState<Token | undefined>();
     const [settings, setSettings] = useState<Settings | undefined>(undefined);
+
+    const handleLogin = useCallback(
+        (newToken: Token) => {
+            if (
+                newToken &&
+                Date.parse(newToken.expires) > Date.now() &&
+                newToken.enviroment === enviroment
+            ) {
+                localStorage.setItem("token", JSON.stringify(newToken));
+                setToken(newToken);
+            }
+        },
+        [enviroment]
+    );
+
+    const handleLogout = () => {
+        localStorage.removeItem("token");
+        setToken(undefined);
+    };
+
+    const saveSettings = (newSettings: Settings) => {
+        localStorage.setItem("settings", JSON.stringify(newSettings));
+        setSettings(newSettings);
+    };
+
     useEffect(() => {
         const storedToken = localStorage.getItem("token");
         if (storedToken) {
-            setToken(JSON.parse(storedToken) as Token);
+            const existingToken = JSON.parse(storedToken) as Token;
+            handleLogin(existingToken);
         }
-    }, []);
-
-    useEffect(() => {
-        if (
-            token &&
-            Date.parse(token.expires) > Date.now() &&
-            token.enviroment === enviroment
-        ) {
-            localStorage.setItem("token", JSON.stringify(token));
-        } else {
-            setToken(undefined);
-            // localStorage.removeItem("token");
+        const storedSettings = localStorage.getItem("settings");
+        console.log(storedSettings);
+        if (storedSettings) {
+            const existingSettings = JSON.parse(storedSettings) as Settings;
+            setSettings(existingSettings);
         }
-    }, [token, enviroment]);
+    }, [handleLogin]);
 
     if (!token) {
         return (
             <>
                 <Login
-                    setToken={setToken}
+                    setToken={handleLogin}
                     Enviroment={enviroment}
                     setEnivorment={setEnviroment}
                 />
@@ -46,16 +65,15 @@ function App() {
     return (
         <>
             <Header
+                Settings={settings}
                 Username={token?.userName}
-                Enviroment={enviroment}
-                changeEnviroment={setEnviroment}
-                signOut={() => setToken(undefined)}
+                signOut={handleLogout}
                 setSettings={(u, p) =>
-                    setSettings({ Username: u, Password: p })
+                    saveSettings({ Username: u, Password: p })
                 }
             />
             <Box pt="48px">
-                <Actions settings={settings} enviroment={enviroment} />
+                <Messaging settings={settings} enviroment={enviroment} />
             </Box>
         </>
     );

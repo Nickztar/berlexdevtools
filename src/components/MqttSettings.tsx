@@ -59,7 +59,10 @@ export function MqttSettings({ Username, Password, setSettings }: Props) {
                             isDisabled={!password || !username}
                             size={"sm"}
                             colorScheme="blue"
-                            onClick={() => setSettings(username, password)}
+                            onClick={() => {
+                                onClose();
+                                setSettings(username, password);
+                            }}
                         >
                             Save
                         </Button>
