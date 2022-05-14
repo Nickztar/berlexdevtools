@@ -9,8 +9,10 @@
 -   [x] Angle
 -   [x] Light/Dark mode
 -   [x] Continuous Integration
--   [x] Continuous Delivery
--   [x] Auto-updating
+-   [x] Continuous Delivery/Deployment
+-   [ ] Position
+-   [ ] Modem/Version
+-   [ ] Schema (r/y/g)
 -   [ ] Queue messages
 -   [ ] Forward MQTT from one env to another
 -   [ ] Send over MQTT instead of HTTP
