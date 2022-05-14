@@ -64,7 +64,7 @@ const useMouse = (ref: RefObject<Element>): State => {
         return () => {
             off(document, "mousemove", moveHandler);
         };
-    }, [ref]);
+    }, [ref, setState]);
 
     return state;
 };
