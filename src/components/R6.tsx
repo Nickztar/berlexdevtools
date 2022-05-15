@@ -1,10 +1,17 @@
-export function R6() {
+import { CSSProperties } from "react";
+
+type Props = {
+    style?: CSSProperties;
+};
+
+export function R6({ style }: Props) {
     return (
         <svg
             width="22"
             height="95"
             viewBox="0 0 22 95"
             fill="none"
+            style={style}
             xmlns="http://www.w3.org/2000/svg"
         >
             <rect x="9" y="79" width="4" height="16" rx="1" fill="#E2BE31" />
