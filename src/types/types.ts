@@ -12,3 +12,10 @@ export type Bit = {
     title: string;
     mask: number;
 };
+
+export type Sch = {
+    title: string;
+    variant: "error" | "warning" | "capability";
+    state: string;
+    time?: number;
+};

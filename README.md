@@ -10,9 +10,9 @@
 -   [x] Light/Dark mode
 -   [x] Continuous Integration
 -   [x] Continuous Delivery/Deployment
--   [ ] Position
+-   [x] Schema (r/y/g)
+-   [-] Position
 -   [ ] Modem/Version
--   [ ] Schema (r/y/g)
 -   [ ] Queue messages
 -   [ ] Forward MQTT from one env to another
 -   [ ] Send over MQTT instead of HTTP

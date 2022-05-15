@@ -6,6 +6,7 @@ import { Capabilities } from "./Actions/Capabilities";
 import { Errors } from "./Actions/Errors";
 import { Powerstates } from "./Actions/Powerstates";
 import { Volt } from "./Actions/Volt";
+import { Schema } from "./Actions/Schema";
 
 type Props = {
     settings: Settings | undefined;
@@ -40,7 +41,7 @@ export function Messaging({ settings, enviroment }: Props) {
     return (
         <Flex h={"100%"} align={"center"} justify="center">
             <VStack spacing={4} align="center">
-                <Flex maxW={"350px"}>
+                <Flex align="center">
                     <Input
                         size="sm"
                         maxW={"50px"}
@@ -60,10 +61,12 @@ export function Messaging({ settings, enviroment }: Props) {
                     />
                 </Flex>
                 <Powerstates setPowerstate={sendAction} />
+                <Schema sendSchema={sendAction} />
                 <Errors sendErrors={sendAction} />
                 <Capabilities sendCapabilites={sendAction} />
                 <Volt sendVolt={sendAction} />
                 <Angle sendAngle={sendAction} />
+                {/* <Position /> */}
             </VStack>
         </Flex>
     );
