@@ -25,7 +25,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "tauri": "tauri"
+    "tauri": "tauri",
+    "prepare": "husky install"
   },
   "eslintConfig": {
     "extends": [
@@ -46,6 +47,9 @@
   },
   "devDependencies": {
     "@tauri-apps/cli": "^1.0.0-rc.10",
-    "cross-env": "^7.0.3"
+    "cross-env": "^7.0.3",
+    "git-branch-is": "^4.0.0",
+    "husky": "^8.0.0",
+    "node-fetch": "^3.2.4"
   }
 }
