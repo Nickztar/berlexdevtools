@@ -4,12 +4,11 @@
         "beforeBuildCommand": "yarn build",
         "beforeDevCommand": "yarn start",
         "devPath": "http://localhost:3000",
-        "distDir": "../build",
-        "withGlobalTauri": true
+        "distDir": "../build"
     },
     "package": {
         "productName": "berlexdevtools",
-        "version": "0.1.0"
+        "version": "0.1.2"
     },
     "tauri": {
         "allowlist": {
@@ -66,17 +65,6 @@
                 "height": 600,
                 "resizable": true,
                 "title": "Berlex Devtools",
-                "visible": false
-            },
-            {
-                "width": 800,
-                "height": 600,
-                "resizable": false,
-                "decorations": true,
-                "url": "splashscreen.html",
-                "title": "Berlex Devtools",
-                "alwaysOnTop": false,
-                "label": "splashscreen",
                 "visible": true
             }
         ]
