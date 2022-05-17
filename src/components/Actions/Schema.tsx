@@ -32,6 +32,7 @@ export function Schema({ sendSchema }: Props) {
         <ButtonGroup isAttached>
             {PossibleSchemas.map((schema) => (
                 <BitAction
+                    key={schema.state}
                     variant={schema.variant}
                     onClick={() =>
                         selected?.state === schema.state
