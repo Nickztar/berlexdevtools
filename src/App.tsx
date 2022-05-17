@@ -43,7 +43,6 @@ function App() {
             handleLogin(existingToken);
         }
         const storedSettings = localStorage.getItem("settings");
-        console.log(storedSettings);
         if (storedSettings) {
             const existingSettings = JSON.parse(storedSettings) as Settings;
             setSettings(existingSettings);

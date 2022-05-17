@@ -19,3 +19,8 @@ export type Sch = {
     state: string;
     time?: number;
 };
+
+export interface IActionProps {
+    sendAction: (message: MqttMessage) => void;
+    baseTopic?: string;
+}

@@ -1,15 +1,11 @@
 import { ButtonGroup, IconButton } from "@chakra-ui/react";
 import { useState } from "react";
 import { MdClear, MdSend } from "react-icons/md";
-import { Bit, MqttMessage } from "../../types/types";
+import { Bit, IActionProps } from "../../types/types";
 import { maskSum } from "../../utils/helpers";
 import { BitAction } from "./BitAction";
 
-type Props = {
-    sendErrors: (message: MqttMessage) => void;
-};
-
-export function Errors({ sendErrors }: Props) {
+export function Errors({ sendAction }: IActionProps) {
     const [selected, setSelected] = useState<Bit[]>([]);
     const PossibleErrors: Bit[] = [
         { title: "bit0", mask: 1 },
@@ -51,7 +47,7 @@ export function Errors({ sendErrors }: Props) {
                 icon={<MdClear />}
                 onClick={() => {
                     setSelected([]);
-                    sendErrors({
+                    sendAction({
                         topic: "error",
                         message: `mask=0`,
                     });
@@ -65,7 +61,7 @@ export function Errors({ sendErrors }: Props) {
                 aria-label={"send"}
                 icon={<MdSend />}
                 onClick={() =>
-                    sendErrors({
+                    sendAction({
                         topic: "error",
                         message: `mask=${maskSum(selected)}`,
                     })

@@ -10,7 +10,6 @@
         "productName": "berlexdevtools",
         "version": "0.1.2"
     },
-
     "tauri": {
         "allowlist": {
             "all": true
@@ -56,16 +55,17 @@
             "endpoints": [
                 "https://berlexdevtools.azurewebsites.net/api/{{target}}/{{current_version}}"
             ],
-            "dialog": true,
+            "dialog": false,
             "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDQ0RTM4Mjk1ODUxMjUwOUYKUldTZlVCS0ZsWUxqUkNWUkRUSlNuSlgvRy9QOVZGcTlYcjhXY3B4U05tdmQzMnBwZElabDVpQ3UK"
         },
         "windows": [
             {
                 "fullscreen": false,
+                "width": 800,
                 "height": 600,
                 "resizable": true,
                 "title": "Berlex Devtools",
-                "width": 800
+                "visible": true
             }
         ]
     }
