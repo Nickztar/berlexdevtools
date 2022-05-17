@@ -1,11 +1,12 @@
 import { Box, ButtonGroup, Flex, IconButton, Tooltip } from "@chakra-ui/react";
-import { useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import useMouse from "../../hooks/useMouse";
 import { off, on } from "../../utils/helpers";
 import { R6 } from "../R6";
 import { BsCircleFill } from "react-icons/bs";
 import { MdClear, MdSend } from "react-icons/md";
-import { MqttMessage } from "../../types/types";
+import { IActionProps } from "../../types/types";
+import { VMS } from "../VMS";
 
 function calcAngle(cx: number, cy: number, ex: number, ey: number) {
     var dy = ey - cy;
@@ -22,16 +23,16 @@ const normalizedAngle = (angle: number) => {
     return Math.round(Math.abs(angle));
 };
 
-type Props = {
-    sendAngle: (message: MqttMessage) => void;
-};
-
-export function Angle({ sendAngle }: Props) {
+export function Angle({ sendAction, baseTopic }: IActionProps) {
     const [rotating, setRotating] = useState<boolean>(false);
     const [angle, setAngle] = useState<number>(0);
     const rotateEl = useRef(null);
     const { elX, elY, elH, elW } = useMouse(rotateEl);
-
+    const RotateElement = useMemo(
+        () => (baseTopic === "VMS" ? VMS : R6),
+        [baseTopic]
+    );
+    console.log(RotateElement);
     const disableRotate = () => {
         off(window, "mouseup", disableRotate);
         setRotating(false);
@@ -84,7 +85,7 @@ export function Angle({ sendAngle }: Props) {
                             icon={<BsCircleFill />}
                         />
                     </Tooltip>
-                    <R6 />
+                    <RotateElement />
                 </Flex>
             </Box>
             <ButtonGroup isAttached mt={3}>
@@ -97,7 +98,7 @@ export function Angle({ sendAngle }: Props) {
                     icon={<MdClear />}
                     onClick={() => {
                         setAngle(0);
-                        sendAngle({
+                        sendAction({
                             topic: "acc",
                             message: `angle=0`,
                         });
@@ -111,7 +112,7 @@ export function Angle({ sendAngle }: Props) {
                     aria-label={"send"}
                     icon={<MdSend />}
                     onClick={() => {
-                        sendAngle({
+                        sendAction({
                             topic: "acc",
                             message: `angle=${normalizedAngle(angle)}`,
                         });

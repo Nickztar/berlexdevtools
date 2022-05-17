@@ -1,15 +1,11 @@
 import { ButtonGroup, IconButton } from "@chakra-ui/react";
 import { useState } from "react";
 import { MdClear, MdSend } from "react-icons/md";
-import { MqttMessage, Bit } from "../../types/types";
+import { Bit, IActionProps } from "../../types/types";
 import { maskSum } from "../../utils/helpers";
 import { BitAction } from "./BitAction";
 
-type Props = {
-    sendCapabilites: (message: MqttMessage) => void;
-};
-
-export function Capabilities({ sendCapabilites }: Props) {
+export function Capabilities({ sendAction }: IActionProps) {
     const [selected, setSelected] = useState<Bit[]>([]);
     const PossibleCapabilities: Bit[] = [
         { title: "bit0", mask: 1 },
@@ -49,7 +45,7 @@ export function Capabilities({ sendCapabilites }: Props) {
                 icon={<MdClear />}
                 onClick={() => {
                     setSelected([]);
-                    sendCapabilites({
+                    sendAction({
                         topic: "capabilities",
                         message: `mask=0`,
                     });
@@ -63,7 +59,7 @@ export function Capabilities({ sendCapabilites }: Props) {
                 aria-label={"send"}
                 icon={<MdSend />}
                 onClick={() =>
-                    sendCapabilites({
+                    sendAction({
                         topic: "capabilities",
                         message: `mask=${maskSum(selected)}`,
                     })

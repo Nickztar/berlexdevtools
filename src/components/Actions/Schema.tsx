@@ -1,14 +1,10 @@
 import { ButtonGroup, IconButton } from "@chakra-ui/react";
 import { useState } from "react";
 import { MdSend } from "react-icons/md";
-import { MqttMessage, Sch } from "../../types/types";
+import { IActionProps, Sch } from "../../types/types";
 import { BitAction } from "./BitAction";
 
-type Props = {
-    sendSchema: (message: MqttMessage) => void;
-};
-
-export function Schema({ sendSchema }: Props) {
+export function Schema({ sendAction }: IActionProps) {
     const [selected, setSelected] = useState<Sch | null>(null);
 
     const PossibleSchemas: Sch[] = [
@@ -53,7 +49,7 @@ export function Schema({ sendSchema }: Props) {
                 icon={<MdSend />}
                 disabled={!selected}
                 onClick={() =>
-                    sendSchema({
+                    sendAction({
                         topic: "sch",
                         message: `${selected?.state}=-1`,
                     })

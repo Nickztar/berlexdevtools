@@ -31,6 +31,7 @@ type Props = {
     onClick: () => void;
     text: string;
     tooltip?: string;
+    size?: string;
     variant: "error" | "warning" | "capability";
 };
 
@@ -39,6 +40,7 @@ export function BitAction({
     onClick,
     text,
     tooltip,
+    size = "sm",
     variant,
 }: Props) {
     const color = useColorModeValue("black", "white");
@@ -48,20 +50,14 @@ export function BitAction({
 
     if (tooltip) {
         return (
-            <Tooltip
-                hasArrow
-                placement="top"
-                label={tooltip}
-                // bg={mainColor}
-                // color={color}
-            >
+            <Tooltip hasArrow placement="top" label={tooltip}>
                 <Button
                     variant={isIncluded ? "solid" : "outline"}
                     colorScheme={colorScheme}
                     color={color}
                     borderColor={mainColor}
                     bg={isIncluded ? mainColor : "transparent"}
-                    size="sm"
+                    size={size}
                     onClick={onClick}
                 >
                     {text}
@@ -77,7 +73,7 @@ export function BitAction({
             color={color}
             borderColor={mainColor}
             bg={isIncluded ? mainColor : "transparent"}
-            size="sm"
+            size={size}
             onClick={onClick}
         >
             {text}

@@ -13,11 +13,7 @@ import {
 import { useState } from "react";
 import { MdSend } from "react-icons/md";
 import { HiLightningBolt } from "react-icons/hi";
-import { MqttMessage } from "../../types/types";
-
-type Props = {
-    sendVolt: (message: MqttMessage) => void;
-};
+import { IActionProps } from "../../types/types";
 
 const formatVoltage = (voltage: number) => {
     return (Math.round(voltage * 100) / 100).toFixed(2);
@@ -28,7 +24,7 @@ const voltColor = (volt: number) => {
     return "green.400";
 };
 
-export function Volt({ sendVolt }: Props) {
+export function Volt({ sendAction }: IActionProps) {
     const [sliderValue, setSliderValue] = useState(12);
     const [showTooltip, setShowTooltip] = useState(false);
     const [timer, setTimer] = useState<NodeJS.Timeout | null>(null);
@@ -114,7 +110,7 @@ export function Volt({ sendVolt }: Props) {
                 aria-label={"send"}
                 icon={<MdSend />}
                 onClick={() => {
-                    sendVolt({
+                    sendAction({
                         topic: "volt",
                         message: `v=${formatVoltage(sliderValue)}`,
                     });
