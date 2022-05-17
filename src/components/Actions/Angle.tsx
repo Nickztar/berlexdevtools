@@ -28,11 +28,12 @@ export function Angle({ sendAction, baseTopic }: IActionProps) {
     const [angle, setAngle] = useState<number>(0);
     const rotateEl = useRef(null);
     const { elX, elY, elH, elW } = useMouse(rotateEl);
+
     const RotateElement = useMemo(
         () => (baseTopic === "VMS" ? VMS : R6),
         [baseTopic]
     );
-    console.log(RotateElement);
+
     const disableRotate = () => {
         off(window, "mouseup", disableRotate);
         setRotating(false);

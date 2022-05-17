@@ -1,36 +1,46 @@
-import { Fade, Flex, Img, useColorModeValue } from "@chakra-ui/react";
+import { Fade, Flex, Img, useColorModeValue, useToast } from "@chakra-ui/react";
 import { relaunch } from "@tauri-apps/api/process";
 import { checkUpdate, installUpdate } from "@tauri-apps/api/updater";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import App from "./App";
+
+let shouldCheck = true;
 
 export function AppWrapper() {
     const imageFilter = useColorModeValue("invert(100%)", "invert(0%)");
     const [checkingUpdate, setCheckingUpdate] = useState(true);
+    const toast = useToast();
     async function CheckUpdate() {
+        shouldCheck = false;
         try {
-            const { shouldUpdate, manifest } = await checkUpdate();
-            console.log({ shouldUpdate, manifest });
+            const { shouldUpdate } = await checkUpdate();
             if (shouldUpdate) {
                 // display dialog
                 await installUpdate();
                 // install complete, restart app
                 await relaunch();
             }
-        } catch (error) {
+        } catch (error: any) {
             console.log(error);
+            toast({
+                title: "Failed to apply update",
+                description: error,
+                status: "error",
+                duration: 2000,
+                isClosable: true,
+                position: "top-left",
+            });
         } finally {
             setCheckingUpdate(false);
         }
     }
 
-    useEffect(() => {
-        CheckUpdate();
-    }, []);
+    //TODO: This ended up being super janky... will most likely need to be reworked
 
-    // if (!checkingUpdate) {
-    //     return <App />;
-    // }
+    const CheckUpdateCallback = useCallback(CheckUpdate, [toast]);
+    useEffect(() => {
+        if (shouldCheck) CheckUpdateCallback();
+    }, [CheckUpdateCallback]);
 
     return (
         <>
