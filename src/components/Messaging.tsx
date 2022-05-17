@@ -8,7 +8,7 @@ import { Powerstates } from "./Actions/Powerstates";
 import { Volt } from "./Actions/Volt";
 import { Schema } from "./Actions/Schema";
 import { TmaStatus } from "./Actions/TmaStatus";
-
+import { useToast } from "@chakra-ui/react";
 type Props = {
     settings: Settings | undefined;
     enviroment: string;
@@ -33,7 +33,7 @@ const Actions: Action[] = [
 export function Messaging({ settings, enviroment }: Props) {
     const [imei, setIMEI] = useState<string>("");
     const [base, setBase] = useState<string>("R6");
-
+    const toast = useToast();
     async function sendAction(action: MqttMessage) {
         const baseUrl = `${enviroment}/api/messagebroker`;
         const topic = `${base}/${imei}/t/${action.topic}`;
@@ -52,7 +52,25 @@ export function Messaging({ settings, enviroment }: Props) {
             },
             body,
         });
-        console.log(response);
+        if (response.status === 200) {
+            toast({
+                title: "Success",
+                description: body,
+                status: "success",
+                duration: 2000,
+                isClosable: true,
+                position: "top-left",
+            });
+        } else {
+            toast({
+                title: "Failed to send action",
+                description: "Check broker authetincation",
+                status: "error",
+                duration: 2000,
+                isClosable: true,
+                position: "top-left",
+            });
+        }
     }
     const filteredActions = useMemo(() => {
         return Actions.filter((x) => x.Base.includes(base));

@@ -25,7 +25,7 @@ const voltColor = (volt: number) => {
 };
 
 export function Volt({ sendAction }: IActionProps) {
-    const [sliderValue, setSliderValue] = useState(12);
+    const [sliderValue, setSliderValue] = useState(13);
     const [showTooltip, setShowTooltip] = useState(false);
     const [timer, setTimer] = useState<NodeJS.Timeout | null>(null);
     const thumbColor = useColorModeValue("gray.800", "white");
@@ -52,7 +52,7 @@ export function Volt({ sendAction }: IActionProps) {
                 min={0}
                 max={15}
                 step={0.1}
-                defaultValue={12}
+                defaultValue={13}
                 onChange={(v) => setSliderValue(v)}
                 onMouseEnter={onEnter}
                 onMouseLeave={onExit}
