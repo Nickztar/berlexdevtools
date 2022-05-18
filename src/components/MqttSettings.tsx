@@ -11,7 +11,8 @@ import {
     ModalFooter,
     IconButton,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { getVersion } from "@tauri-apps/api/app";
+import { useEffect, useState } from "react";
 import { MdOutlineSettings } from "react-icons/md";
 
 type Props = {
@@ -25,6 +26,13 @@ export function MqttSettings({ Username, Password, setSettings }: Props) {
 
     const [username, setUsername] = useState(Username || "");
     const [password, setPassword] = useState(Password || "");
+    const [version, setVersion] = useState("0.0.0");
+
+    useEffect(() => {
+        getVersion().then((qVersion) => {
+            setVersion(qVersion);
+        });
+    }, []);
 
     return (
         <>
@@ -36,7 +44,7 @@ export function MqttSettings({ Username, Password, setSettings }: Props) {
             <Modal size={"sm"} isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent>
-                    <ModalHeader py={2}>Settings</ModalHeader>
+                    <ModalHeader py={2}>Settings - v{version}</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
                         <Input

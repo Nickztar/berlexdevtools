@@ -1,23 +1,24 @@
-import { Fade, Flex, Img, useColorModeValue, useToast } from "@chakra-ui/react";
-import { relaunch } from "@tauri-apps/api/process";
-import { checkUpdate, installUpdate } from "@tauri-apps/api/updater";
+import { Fade, useToast } from "@chakra-ui/react";
+import { checkUpdate, UpdateManifest } from "@tauri-apps/api/updater";
 import { useEffect, useState } from "react";
+import { SplashScreen } from "./components/Splashscreen";
 import App from "./App";
 
 export function AppWrapper() {
-    const imageFilter = useColorModeValue("invert(100%)", "invert(0%)");
     const [checkingUpdate, setCheckingUpdate] = useState(true);
+    const [updateManifest, setUpdateManifest] = useState<
+        UpdateManifest | undefined
+    >(undefined);
     const toast = useToast();
 
     useEffect(() => {
         const query = setTimeout(async () => {
             try {
-                const { shouldUpdate } = await checkUpdate();
+                const { shouldUpdate, manifest } = await checkUpdate();
                 if (shouldUpdate) {
-                    // display dialog
-                    await installUpdate();
-                    // install complete, restart app
-                    await relaunch();
+                    setUpdateManifest(manifest);
+                } else {
+                    setCheckingUpdate(false);
                 }
             } catch (error) {
                 console.log(error);
@@ -34,7 +35,6 @@ export function AppWrapper() {
                         position: "top-left",
                     });
                 }
-            } finally {
                 setCheckingUpdate(false);
             }
         }, 1);
@@ -54,22 +54,10 @@ export function AppWrapper() {
                 in={checkingUpdate}
                 unmountOnExit
             >
-                <Flex
-                    h="100%"
-                    w="100%"
-                    justify={"center"}
-                    position={"absolute"}
-                    bg={"gray.800"}
-                    top={0}
-                    align={"center"}
-                >
-                    <Img
-                        filter={imageFilter}
-                        p={"10%"}
-                        src="Berlex_ITS_logo_white.svg"
-                        alt="BerlexConnect - Intelligent traffic systems"
-                    />
-                </Flex>
+                <SplashScreen
+                    manifest={updateManifest}
+                    done={() => setCheckingUpdate(false)}
+                />
             </Fade>
         </>
     );
