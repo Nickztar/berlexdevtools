@@ -1,46 +1,49 @@
 import { Fade, Flex, Img, useColorModeValue, useToast } from "@chakra-ui/react";
 import { relaunch } from "@tauri-apps/api/process";
 import { checkUpdate, installUpdate } from "@tauri-apps/api/updater";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import App from "./App";
-
-let shouldCheck = true;
 
 export function AppWrapper() {
     const imageFilter = useColorModeValue("invert(100%)", "invert(0%)");
     const [checkingUpdate, setCheckingUpdate] = useState(true);
     const toast = useToast();
-    async function CheckUpdate() {
-        shouldCheck = false;
-        try {
-            const { shouldUpdate } = await checkUpdate();
-            if (shouldUpdate) {
-                // display dialog
-                await installUpdate();
-                // install complete, restart app
-                await relaunch();
-            }
-        } catch (error: any) {
-            console.log(error);
-            toast({
-                title: "Failed to apply update",
-                description: error,
-                status: "error",
-                duration: 2000,
-                isClosable: true,
-                position: "top-left",
-            });
-        } finally {
-            setCheckingUpdate(false);
-        }
-    }
 
-    //TODO: This ended up being super janky... will most likely need to be reworked
-
-    const CheckUpdateCallback = useCallback(CheckUpdate, [toast]);
     useEffect(() => {
-        if (shouldCheck) CheckUpdateCallback();
-    }, [CheckUpdateCallback]);
+        const query = setTimeout(async () => {
+            try {
+                const { shouldUpdate } = await checkUpdate();
+                if (shouldUpdate) {
+                    // display dialog
+                    await installUpdate();
+                    // install complete, restart app
+                    await relaunch();
+                }
+            } catch (error) {
+                console.log(error);
+                if (
+                    typeof error === "string" &&
+                    !error.includes("EOF while parsing a value")
+                ) {
+                    toast({
+                        title: "Failed to apply update",
+                        description: error,
+                        status: "error",
+                        duration: 2000,
+                        isClosable: true,
+                        position: "top-left",
+                    });
+                }
+            } finally {
+                setCheckingUpdate(false);
+            }
+        }, 1);
+
+        return () => {
+            //On unmount, "cancel" the query
+            clearTimeout(query);
+        };
+    }, [toast]);
 
     return (
         <>

@@ -46,7 +46,7 @@
     ]
   },
   "devDependencies": {
-    "@tauri-apps/cli": "^1.0.0-rc.10",
+    "@tauri-apps/cli": "^1.0.0-rc.11",
     "cross-env": "^7.0.3",
     "husky": "^8.0.0",
     "node-fetch": "^3.2.4"

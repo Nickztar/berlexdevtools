@@ -56,7 +56,7 @@
                 "https://berlexdevtools.azurewebsites.net/api/{{target}}/{{current_version}}"
             ],
             "dialog": false,
-            "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDQ0RTM4Mjk1ODUxMjUwOUYKUldTZlVCS0ZsWUxqUkNWUkRUSlNuSlgvRy9QOVZGcTlYcjhXY3B4U05tdmQzMnBwZElabDVpQ3UK"
+            "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDUyRUJCQzA5MTg5MjIwQzAKUldUQUlKSVlDYnpyVW5LUit1MkNYZTNUbm50MDZhSlVCbHBlWTA3RXBUOTRNbldxOVlVZXJjR0gK"
         },
         "windows": [
             {
