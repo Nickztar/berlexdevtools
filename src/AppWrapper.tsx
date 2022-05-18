@@ -1,13 +1,8 @@
 import { Fade, useToast } from "@chakra-ui/react";
-import {
-    checkUpdate,
-    installUpdate,
-    UpdateManifest,
-} from "@tauri-apps/api/updater";
+import { checkUpdate, UpdateManifest } from "@tauri-apps/api/updater";
 import { useEffect, useState } from "react";
 import { SplashScreen } from "./components/Splashscreen";
 import App from "./App";
-import { relaunch } from "@tauri-apps/api/process";
 
 export function AppWrapper() {
     const [checkingUpdate, setCheckingUpdate] = useState(true);
@@ -15,26 +10,6 @@ export function AppWrapper() {
         UpdateManifest | undefined
     >(undefined);
     const toast = useToast();
-
-    const performUpdate = async () => {
-        try {
-            await installUpdate();
-            await relaunch();
-        } catch (e) {
-            if (typeof e === "string") {
-                toast({
-                    title: "Update failed",
-                    description: e,
-                    status: "error",
-                    duration: 2000,
-                    isClosable: true,
-                    position: "top-left",
-                });
-            }
-        } finally {
-            setCheckingUpdate(false);
-        }
-    };
 
     useEffect(() => {
         const query = setTimeout(async () => {

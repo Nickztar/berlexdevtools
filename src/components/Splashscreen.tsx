@@ -4,7 +4,6 @@ import {
     Img,
     Text,
     Button,
-    toast,
     useToast,
 } from "@chakra-ui/react";
 import { relaunch } from "@tauri-apps/api/process";
@@ -59,17 +58,22 @@ export function SplashScreen({ manifest, done }: Props) {
                 alt="BerlexConnect - Intelligent traffic systems"
             />
             {manifest ? (
-                <Button
-                    mt={-4}
-                    isLoading={loading}
-                    onClick={performUpdate}
-                    variant="solid"
-                    colorScheme={"red"}
-                    bg={"red.500"}
-                    color={"white"}
-                >
-                    Upgrade to {manifest.version}
-                </Button>
+                <Flex flexDir={"column"}>
+                    <Button
+                        mt={-4}
+                        isLoading={loading}
+                        onClick={performUpdate}
+                        variant="solid"
+                        colorScheme={"red"}
+                        bg={"red.500"}
+                        color={"white"}
+                    >
+                        Upgrade to v{manifest.version}
+                    </Button>
+                    <Button variant={"link"} size={"xs"} onClick={done}>
+                        Skip
+                    </Button>
+                </Flex>
             ) : (
                 <Text
                     mt={-4}
