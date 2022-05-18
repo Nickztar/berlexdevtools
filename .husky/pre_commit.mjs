@@ -32,7 +32,7 @@ const confFile = await readFile("./src-tauri/tauri.conf.json", {
 const json = await response.json();
 const config = JSON.parse(confFile);
 
-const releasedVersion = json.tag_name;
+const releasedVersion = json.tag_name.replace("app-v", "");
 const localVersion = config.package.version;
 const isUpToDate = upToDate(localVersion, releasedVersion);
 if (!isUpToDate) throw new Error("Update the version for release branch");
