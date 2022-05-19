@@ -20,6 +20,17 @@ export type Sch = {
     time?: number;
 };
 
+export type QueueMessage = {
+    topic: string;
+    message: string;
+};
+
+export type PreviousMessage = {
+    topic: string;
+    message: string;
+    sentAt: number;
+};
+
 export interface IActionProps {
     sendAction: (message: MqttMessage) => void;
     baseTopic?: string;

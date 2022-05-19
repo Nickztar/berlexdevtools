@@ -73,7 +73,7 @@ export function Angle({ sendAction, baseTopic }: IActionProps) {
                         }
                         color="white"
                         placement="top"
-                        isOpen={true}
+                        isOpen={rotating}
                         label={`${normalizedAngle(angle)}°`}
                     >
                         <IconButton

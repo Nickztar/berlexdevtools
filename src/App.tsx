@@ -6,6 +6,7 @@ import { Login } from "./components/Login";
 import { Enviroments } from "./types/constants";
 import { Token } from "./types/token";
 import { Settings } from "./types/types";
+import { HistoryProvider } from "./providers/HistoryProvider";
 
 function App() {
     const [enviroment, setEnviroment] = useState(Enviroments.Test);
@@ -62,7 +63,7 @@ function App() {
     }
 
     return (
-        <>
+        <HistoryProvider>
             <Header
                 Settings={settings}
                 Username={token?.userName}
@@ -74,7 +75,7 @@ function App() {
             <Box pt="48px">
                 <Messaging settings={settings} enviroment={enviroment} />
             </Box>
-        </>
+        </HistoryProvider>
     );
 }
 

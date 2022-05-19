@@ -10,6 +10,7 @@ import { GoSignOut } from "react-icons/go";
 import { MqttSettings } from "./MqttSettings";
 import { FaMoon, FaSun } from "react-icons/fa";
 import { Settings } from "../types/types";
+import { History } from "./History";
 
 type Props = {
     Username?: string;
@@ -40,6 +41,7 @@ export function Header({ Username, Settings, signOut, setSettings }: Props) {
             <ButtonGroup size="sm" isAttached variant="outline">
                 {Username && (
                     <>
+                        <History />
                         <MqttSettings
                             Username={Settings?.Username}
                             Password={Settings?.Password}
