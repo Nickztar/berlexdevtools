@@ -1,4 +1,13 @@
-import { Flex, Input, VStack } from "@chakra-ui/react";
+import {
+    Button,
+    Flex,
+    Input,
+    Menu,
+    MenuButton,
+    MenuItem,
+    MenuList,
+    VStack,
+} from "@chakra-ui/react";
 import { FunctionComponent, useMemo, useState } from "react";
 import { IActionProps, MqttMessage, Settings } from "../types/types";
 import { Angle } from "./Actions/Angle";
@@ -9,6 +18,8 @@ import { Volt } from "./Actions/Volt";
 import { Schema } from "./Actions/Schema";
 import { TmaStatus } from "./Actions/TmaStatus";
 import { useToast } from "@chakra-ui/react";
+import { useHistory } from "../providers/HistoryProvider";
+
 type Props = {
     settings: Settings | undefined;
     enviroment: string;
@@ -33,6 +44,7 @@ const Actions: Action[] = [
 export function Messaging({ settings, enviroment }: Props) {
     const [imei, setIMEI] = useState<string>("");
     const [base, setBase] = useState<string>("R6");
+    const { addToHistory } = useHistory();
     const toast = useToast();
     async function sendAction(action: MqttMessage) {
         const baseUrl = `${enviroment}/api/messagebroker`;
@@ -53,18 +65,15 @@ export function Messaging({ settings, enviroment }: Props) {
             body,
         });
         if (response.status === 200) {
-            toast({
-                title: "Success",
-                description: body,
-                status: "success",
-                duration: 2000,
-                isClosable: true,
-                position: "top-left",
+            addToHistory({
+                topic,
+                message: payload,
+                sentAt: Date.now(),
             });
         } else {
             toast({
                 title: "Failed to send action",
-                description: "Check broker authetincation",
+                description: "Check broker authentication",
                 status: "error",
                 duration: 2000,
                 isClosable: true,
@@ -79,15 +88,29 @@ export function Messaging({ settings, enviroment }: Props) {
         <Flex h={"100%"} align={"center"} justify="center">
             <VStack spacing={4} align="center">
                 <Flex align="center">
-                    <Input
-                        size="sm"
-                        maxW={"60px"}
-                        borderRadius={"md"}
-                        borderRightRadius={0}
-                        onChange={(e) => setBase(e.target.value)}
-                        placeholder="Base"
-                        value={base}
-                    />
+                    <Menu gutter={0}>
+                        <MenuButton
+                            bg={"transparent"}
+                            fontSize={"sm"}
+                            height={8}
+                            pl={3}
+                            borderRightRadius={0}
+                            border={"1px solid"}
+                            borderColor="inherit"
+                            borderRight={0}
+                            as={Button}
+                        >
+                            {base}
+                        </MenuButton>
+                        <MenuList>
+                            <MenuItem onClick={() => setBase("R6")}>
+                                R6
+                            </MenuItem>
+                            <MenuItem onClick={() => setBase("VMS")}>
+                                VMS
+                            </MenuItem>
+                        </MenuList>
+                    </Menu>
                     <Input
                         size="sm"
                         borderRadius={"md"}
