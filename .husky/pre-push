@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
-if npx git-branch-is release
+if git-branch-is release
 then node ./.husky/pre_push.mjs
 fi
 
