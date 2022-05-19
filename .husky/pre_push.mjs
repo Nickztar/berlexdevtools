@@ -35,4 +35,11 @@ const config = JSON.parse(confFile);
 const releasedVersion = json.tag_name.replace("app-v", "");
 const localVersion = config.package.version;
 const isUpToDate = upToDate(localVersion, releasedVersion);
-if (!isUpToDate) throw new Error("Update the version for release branch");
+//throw the versions if mismatch
+if (!isUpToDate) {
+    throw new Error(
+        `Your version is out of date.\n
+        Released version: ${releasedVersion}\n
+        Current version: ${localVersion}`
+    );
+}
