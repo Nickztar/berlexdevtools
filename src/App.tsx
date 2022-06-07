@@ -7,6 +7,7 @@ import { Enviroments } from "./types/constants";
 import { Token } from "./types/token";
 import { Settings } from "./types/types";
 import { HistoryProvider } from "./providers/HistoryProvider";
+import { Live } from "./components/LiveView/Live";
 
 function App() {
     const [enviroment, setEnviroment] = useState(Enviroments.Test);
@@ -73,7 +74,8 @@ function App() {
                 }
             />
             <Box pt="48px">
-                <Messaging settings={settings} enviroment={enviroment} />
+                <Live />
+                {/* <Messaging settings={settings} enviroment={enviroment} /> */}
             </Box>
         </HistoryProvider>
     );

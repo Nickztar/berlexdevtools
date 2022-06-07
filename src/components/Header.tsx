@@ -11,7 +11,6 @@ import { MqttSettings } from "./MqttSettings";
 import { FaMoon, FaSun } from "react-icons/fa";
 import { Settings } from "../types/types";
 import { History } from "./History";
-
 type Props = {
     Username?: string;
     Settings: Settings | undefined;
